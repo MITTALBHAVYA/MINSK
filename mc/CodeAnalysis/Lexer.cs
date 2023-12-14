@@ -1,6 +1,6 @@
 namespace Minsk.CodeAnalysis
 {
-    class Lexer
+   internal sealed class Lexer
     {
         private readonly string _text;
         private int _position;
@@ -45,7 +45,7 @@ namespace Minsk.CodeAnalysis
                 {
                     _diagnostics.Add($"The number {_text} isn't valid Int32");
                 }
-                return new SyntaxToken(SyntaxKind.NumberToken,start,text,value);
+                return new SyntaxToken(SyntaxKind.LiteralToken,start,text,value);
             }
             if(char.IsWhiteSpace(Current))
             {
