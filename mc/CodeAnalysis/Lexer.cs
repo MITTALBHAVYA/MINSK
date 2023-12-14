@@ -25,7 +25,7 @@ namespace Minsk.CodeAnalysis
         {
             _position++;
         }
-        public SyntaxToken NextToken()
+        public SyntaxToken Lex()
         {
             //<numbers>
             //+ - * / ()

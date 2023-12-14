@@ -12,7 +12,7 @@ namespace Minsk.CodeAnalysis
             var lexer = new Lexer(text);
             SyntaxToken token;
             do{
-                token = lexer.NextToken();
+                token = lexer.Lex();
                 if(token.Kind != SyntaxKind.WhitespaceToken && token.Kind != SyntaxKind.BadToken){
                     tokens.Add(token);
                 }
@@ -32,7 +32,7 @@ namespace Minsk.CodeAnalysis
         }
         private SyntaxToken Current => Peek(0);
 
-        private SyntaxToken NextToken()
+        private SyntaxToken Lex()
         {
              var current=Current;
              _position++;
@@ -43,7 +43,7 @@ namespace Minsk.CodeAnalysis
         {
              if(Current.Kind == kind)
              {
-                return NextToken();
+                return Lex();
              }
              _diagnostics.Add($"Error: Unexpected token <{Current.Kind}>, expected <{kind}>");
              return new SyntaxToken(kind, Current.Position,null,null);
@@ -67,7 +67,7 @@ namespace Minsk.CodeAnalysis
 
             while (Current.Kind == SyntaxKind.PlusToken || Current.Kind == SyntaxKind.MinusToken)
             {
-                var operatorToken = NextToken();
+                var operatorToken = Lex();
                 var right = ParseFactor();
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
@@ -79,7 +79,7 @@ namespace Minsk.CodeAnalysis
 
             while (Current.Kind ==SyntaxKind.StarToken || Current.Kind == SyntaxKind.SlashToken)
             {
-                var operatorToken = NextToken();
+                var operatorToken = Lex();
                 var right = ParsePrimaryExpression();
                 left = new BinaryExpressionSyntax(left, operatorToken, right);
             }
@@ -89,7 +89,7 @@ namespace Minsk.CodeAnalysis
         {
             if(Current.Kind == SyntaxKind.OpenParenthesisToken)
             {
-                var left = NextToken();
+                var left = Lex();
                 var expression = ParseExpression();
                 var right = MatchToken(SyntaxKind.ClosedParenthesisToken);
                 return new ParenthesizedExpressionSyntax(left,expression,right);
