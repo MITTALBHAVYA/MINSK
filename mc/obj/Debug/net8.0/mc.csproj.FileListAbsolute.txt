@@ -12,3 +12,4 @@ G:\bhavyaCompiler\MINSK\mc\obj\Debug\net8.0\refint\mc.dll
 G:\bhavyaCompiler\MINSK\mc\obj\Debug\net8.0\mc.pdb
 G:\bhavyaCompiler\MINSK\mc\obj\Debug\net8.0\mc.genruntimeconfig.cache
 G:\bhavyaCompiler\MINSK\mc\obj\Debug\net8.0\ref\mc.dll
+G:\bhavyaCompiler\MINSK\mc\obj\Debug\net8.0\mc.sourcelink.json
