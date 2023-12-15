@@ -55,36 +55,66 @@ namespace Minsk.CodeAnalysis
             var endOfFileToken=MatchToken(SyntaxKind.EndOfFileToken);
             return new SyntaxTree(_diagnostics,expression,endOfFileToken);
         }
-        private ExpressionSyntax ParseExpression()
-        {
-            return ParseTerm();
-        }
+        // private ExpressionSyntax ParseExpression()
+        // {
+        //     return ParseTerm();
+        // }
        
+       private ExpressionSyntax ParseExpression(int parentPrecedence = 0)
+       {
+        var left = ParsePrimaryExpression();
 
-        private ExpressionSyntax ParseTerm()
+        while(true)
         {
-            var left = ParseFactor();
-
-            while (Current.Kind == SyntaxKind.PlusToken || Current.Kind == SyntaxKind.MinusToken)
+            var precedence = GetBinaryOperatorPrecedence(Current.Kind);
+            if(precedence == 0 || precedence<=parentPrecedence)
             {
-                var operatorToken = Lex();
-                var right = ParseFactor();
-                left = new BinaryExpressionSyntax(left, operatorToken, right);
+                break;
             }
-            return left;
+            var operatorToken = Lex();
+            var right = ParseExpression(precedence);
+            left = new BinaryExpressionSyntax(left,operatorToken,right);
         }
-        private ExpressionSyntax ParseFactor()
+        return left;
+       }
+
+       private static int GetBinaryOperatorPrecedence(SyntaxKind kind){
+        switch(kind)
         {
-            var left = ParsePrimaryExpression();
-
-            while (Current.Kind ==SyntaxKind.StarToken || Current.Kind == SyntaxKind.SlashToken)
-            {
-                var operatorToken = Lex();
-                var right = ParsePrimaryExpression();
-                left = new BinaryExpressionSyntax(left, operatorToken, right);
-            }
-            return left;
+            case SyntaxKind.StarToken:
+            case SyntaxKind.SlashToken:
+                 return 2;
+            case SyntaxKind.PlusToken:
+            case SyntaxKind.MinusToken:
+                 return 1;
+            default:
+                 return 0;
         }
+       }
+        // private ExpressionSyntax ParseTerm()
+        // {
+        //     var left = ParseFactor();
+
+        //     while (Current.Kind == SyntaxKind.PlusToken || Current.Kind == SyntaxKind.MinusToken)
+        //     {
+        //         var operatorToken = Lex();
+        //         var right = ParseFactor();
+        //         left = new BinaryExpressionSyntax(left, operatorToken, right);
+        //     }
+        //     return left;
+        // }
+        // private ExpressionSyntax ParseFactor()
+        // {
+        //     var left = ParsePrimaryExpression();
+
+        //     while (Current.Kind ==SyntaxKind.StarToken || Current.Kind == SyntaxKind.SlashToken)
+        //     {
+        //         var operatorToken = Lex();
+        //         var right = ParsePrimaryExpression();
+        //         left = new BinaryExpressionSyntax(left, operatorToken, right);
+        //     }
+        //     return left;
+        // }
         private ExpressionSyntax ParsePrimaryExpression()
         {
             if(Current.Kind == SyntaxKind.OpenParenthesisToken)
