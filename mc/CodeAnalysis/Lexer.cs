@@ -57,7 +57,21 @@ namespace Minsk.CodeAnalysis
                 var text = _text.Substring(start,length);
                 return new SyntaxToken(SyntaxKind.WhitespaceToken,start,text, null);
             }
-            if(Current == '+'){
+            switch (Current)
+            {
+                case '+':return new SyntaxToken(SyntaxKind.PlusToken,_position++,"+", null);
+                case '-':return new SyntaxToken(SyntaxKind.MinusToken,_position++,"-",null);
+
+                case '*':return new SyntaxToken(SyntaxKind.StarToken,_position++,"*",null);
+
+                case '/':return new SyntaxToken(SyntaxKind.SlashToken,_position++,"/",null);
+
+                case '(':return new SyntaxToken(SyntaxKind.OpenParenthesisToken,_position++,"(", null);
+
+                case ')':return new SyntaxToken(SyntaxKind.ClosedParenthesisToken,_position++,")",null);
+
+            }
+           /* if(Current == '+'){
                 return new SyntaxToken(SyntaxKind.PlusToken,_position++,"+", null);
             }
             else if(Current == '-'){
@@ -74,7 +88,7 @@ namespace Minsk.CodeAnalysis
             }
             else if(Current == ')'){
                 return new SyntaxToken(SyntaxKind.ClosedParenthesisToken,_position++,")",null);
-            }
+            }*/
             _diagnostics.Add($"ERROR: bad character input: `{Current}`");
             return new SyntaxToken(SyntaxKind.BadToken,_position++,_text.Substring(_position - 1,1),null);
         }
