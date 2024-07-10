@@ -75,7 +75,7 @@ Optimization passes on the syntax tree.
 Additional features such as variable assignments and functions.
 Contributing
 Contributions are welcome! Please fork the repository and submit pull requests.
-
+![showcase](image.png)
 License
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
